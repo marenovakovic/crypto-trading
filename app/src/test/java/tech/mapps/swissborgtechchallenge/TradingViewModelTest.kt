@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import tech.mapps.swissborgtechchallenge.api.Ticker
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -216,7 +215,7 @@ class TradingViewModelTest {
     @Test
     fun `search tickers`() = runTest {
         val tickers = randomTickers.toImmutableList()
-        val query = tickers.first().symbol
+        val query = tickers.first().ticker
         val viewModel = viewModel(tickers = tickers.right())
 
         viewModel.init()
@@ -265,7 +264,7 @@ class TradingViewModelTest {
     @Test
     fun `restore query after process death`() = runTest {
         val tickers = randomTickers.toImmutableList()
-        val query = tickers.first().symbol
+        val query = tickers.first().ticker
         val viewModel = viewModel(tickers = tickers.right())
 
         viewModel.init()

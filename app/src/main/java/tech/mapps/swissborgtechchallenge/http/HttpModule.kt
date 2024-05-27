@@ -1,10 +1,9 @@
-package tech.mapps.swissborgtechchallenge
+package tech.mapps.swissborgtechchallenge.http
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import tech.mapps.swissborgtechchallenge.http.httpClient
 
 @Module
 @InstallIn(SingletonComponent::class)

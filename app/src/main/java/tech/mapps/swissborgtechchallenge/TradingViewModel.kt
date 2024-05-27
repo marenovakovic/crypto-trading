@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import tech.mapps.swissborgtechchallenge.api.Ticker
 
 data class TradingState(
     val connectivityStatus: ConnectivityStatus? = null,
@@ -78,4 +77,4 @@ class TradingViewModel @Inject constructor(
 }
 
 fun ImmutableList<Ticker>.search(query: String) =
-    filter { it.symbol.contains(query, ignoreCase = true) }.toImmutableList()
+    filter { it.ticker.contains(query, ignoreCase = true) }.toImmutableList()

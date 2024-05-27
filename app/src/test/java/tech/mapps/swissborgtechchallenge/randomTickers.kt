@@ -1,14 +1,28 @@
 package tech.mapps.swissborgtechchallenge
 
-import tech.mapps.swissborgtechchallenge.api.Ticker
+import tech.mapps.swissborgtechchallenge.api.TickerDto
 import kotlin.random.Random
 
 val randomTickers: List<Ticker>
     get() = List(Random.nextInt(1, 5)) {
-        GenericTicker(symbol = it.toString())
+        Ticker(
+            ticker = it.toString(),
+            currency = it.toString(),
+            price = "",
+            dailyVolume = "",
+            dailyHigh = "",
+            dailyLow = "",
+            change24h = "",
+            change24hPercentage = "",
+        )
     }
 
-data class GenericTicker(
+val randomTickerDtos: List<TickerDto>
+    get() = List(Random.nextInt(1, 5)) {
+        GenericTickerDto(symbol = it.toString())
+    }
+
+data class GenericTickerDto(
     override val symbol: String = "",
     override val priceOfLastHighestBid: Float = 0f,
     override val sumOf25HighestBids: Float = 0f,
@@ -20,4 +34,4 @@ data class GenericTicker(
     override val dailyVolume: Float = 0f,
     override val dailyHigh: Float = 0f,
     override val dailyLow: Float = 0f,
-) : Ticker
+) : TickerDto

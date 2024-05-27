@@ -5,10 +5,8 @@ import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapLatest
 import tech.mapps.swissborgtechchallenge.api.CryptoTradingApi
-import tech.mapps.swissborgtechchallenge.api.Ticker
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.seconds
@@ -21,10 +19,11 @@ class ObserveTickersImpl @Inject constructor(
 ) : ObserveTickers {
     override fun invoke(): Flow<Either<Unit, ImmutableList<Ticker>>> =
         tickerFlow(period = period, initialDelay = ZERO)
-            .flatMapLatest { flowOf(getTickers()) }
+            .mapLatest { getTickers() }
 
     private suspend fun getTickers() =
         Either
-            .catch { api.getTickers().toImmutableList() }
+            .catch { api.getTickers() }
+            .map { dtos -> dtos.map { it.toTicker() }.toImmutableList() }
             .mapLeft { it.printStackTrace() }
 }

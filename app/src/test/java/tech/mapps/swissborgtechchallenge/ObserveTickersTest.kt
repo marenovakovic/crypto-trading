@@ -36,7 +36,8 @@ class ObserveTickersTest {
         startEmitting()
 
         observeTickers().test {
-            val expectedTickers = api.tickers.toImmutableList()
+            val expectedTickers =
+                api.tickerDtos.map { it.toTicker() }.toImmutableList()
             assertEquals(expectedTickers.right(), awaitItem())
         }
     }
@@ -72,10 +73,10 @@ class ObserveTickersTest {
     fun `emit tickers and then error`() = runTest {
         val period = 1.seconds
         val shouldFail = AtomicBoolean(false)
-        val tickers = randomTickers
+        val tickerDtos = randomTickerDtos
         val api = StubCryptoTradingApi {
             if (shouldFail.getAndSet(true)) throw Throwable()
-            else tickers
+            else tickerDtos
         }
         val observeTickers = ObserveTickersImpl(api, period)
 
@@ -83,7 +84,8 @@ class ObserveTickersTest {
         testScheduler.advanceTimeBy(period)
 
         observeTickers().test {
-            assertEquals(tickers.toImmutableList().right(), awaitItem())
+            val expectedTickers = tickerDtos.map { it.toTicker() }.toImmutableList()
+            assertEquals(expectedTickers.right(), awaitItem())
             assertEquals(Unit.left(), awaitItem())
         }
     }

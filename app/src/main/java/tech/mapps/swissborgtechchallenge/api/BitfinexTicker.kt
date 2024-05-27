@@ -25,7 +25,7 @@ data class BitfinexTicker(
     override val dailyVolume: Float = 0f,
     override val dailyHigh: Float = 0f,
     override val dailyLow: Float = 0f,
-) : Ticker
+) : TickerDto
 
 object BitfinexTickerSerializer : KSerializer<BitfinexTicker> {
     override val descriptor: SerialDescriptor =
