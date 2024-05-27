@@ -224,17 +224,7 @@ class TradingViewModelTest {
         viewModel.state.test {
             skipItems(1)
 
-            viewModel.search(query)
-
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = tickers,
-                    query = query,
-                    error = null,
-                ),
-                awaitItem()
-            )
+            assertSearched(viewModel, query, tickers)
         }
     }
 
@@ -264,7 +254,7 @@ class TradingViewModelTest {
         assertEquals(
             TradingState(
                 connectivityStatus = ConnectivityStatus.Available,
-                tickers = tickers,
+                tickers = tickers.search(query),
                 query = query,
                 error = null,
             ),
@@ -288,7 +278,7 @@ class TradingViewModelTest {
             assertEquals(
                 TradingState(
                     connectivityStatus = ConnectivityStatus.Available,
-                    tickers = tickers,
+                    tickers = tickers.search(query),
                     query = query,
                     error = null,
                 ),

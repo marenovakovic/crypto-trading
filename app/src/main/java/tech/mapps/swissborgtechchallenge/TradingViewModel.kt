@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -36,7 +37,10 @@ class TradingViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(TradingState())
     val state = combine(_state, query) { tradingState, query ->
-        tradingState.copy(query = query)
+        tradingState.copy(
+            tickers = tradingState.tickers.search(query),
+            query = query,
+        )
     }
         .stateIn(
             scope = viewModelScope,
@@ -72,3 +76,6 @@ class TradingViewModel @Inject constructor(
         const val QUERY = "query"
     }
 }
+
+fun ImmutableList<Ticker>.search(query: String) =
+    filter { it.symbol.contains(query, ignoreCase = true) }.toImmutableList()
