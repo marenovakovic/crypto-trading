@@ -2,7 +2,6 @@
 
 package tech.mapps.swissborgtechchallenge.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.mapps.swissborgtechchallenge.R
 import tech.mapps.swissborgtechchallenge.TradingViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TradingScreen(
     modifier: Modifier = Modifier,
