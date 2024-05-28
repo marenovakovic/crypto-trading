@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -69,209 +70,192 @@ class TradingViewModelTest {
         }
     }
 
-    @Test
-    fun `observe tickers`() = runTest {
-        val tickers = randomTickers.toImmutableList()
-        val viewModel = viewModel(tickers = tickers.right())
+    @Nested
+    inner class ObserveTickers {
 
-        viewModel.init()
+        @Test
+        fun `observe tickers`() = runTest {
+            val tickers = randomTickers.toImmutableList()
+            val viewModel = viewModel(tickers = tickers.right())
 
-        viewModel.state.test {
-            assertEquals(
-                TradingState(ConnectivityStatus.Available, tickers),
-                awaitItem(),
-            )
+            viewModel.init()
+
+            viewModel.state.test {
+                assertEquals(
+                    TradingState(ConnectivityStatus.Available, tickers),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `observe tickers error`() = runTest {
+            val viewModel = viewModel(tickers = Unit.left())
+
+            viewModel.init()
+
+            viewModel.state.test {
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = persistentListOf(),
+                        error = Unit,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `when error occurs still show stale data`() = runTest {
+            val tickers = randomTickers.toImmutableList()
+            val tickerFlow = MutableStateFlow<Either<Unit, ImmutableList<Ticker>>?>(null)
+            val viewModel = viewModel(tickersFlow = tickerFlow.filterNotNull())
+
+            viewModel.init()
+
+            viewModel.state.test {
+                skipItems(1)
+
+                tickerFlow.update { tickers.right() }
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = tickers,
+                        error = null,
+                    ),
+                    awaitItem(),
+                )
+
+                tickerFlow.update { Unit.left() }
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = tickers,
+                        error = Unit,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `error is null when tickers are successfully observed`() = runTest {
+            val tickers = randomTickers.toImmutableList()
+            val tickerFlow = MutableStateFlow<Either<Unit, ImmutableList<Ticker>>?>(null)
+            val viewModel = viewModel(tickersFlow = tickerFlow.filterNotNull())
+
+            viewModel.init()
+
+            viewModel.state.test {
+                skipItems(1)
+
+                tickerFlow.update { Unit.left() }
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = persistentListOf(),
+                        error = Unit,
+                    ),
+                    awaitItem(),
+                )
+
+                tickerFlow.update { tickers.right() }
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = tickers,
+                        error = null,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `success, error, success`() = runTest {
+            val tickers = randomTickers.toImmutableList()
+            val tickerFlow = MutableStateFlow<Either<Unit, ImmutableList<Ticker>>?>(null)
+            val viewModel = viewModel(tickersFlow = tickerFlow.filterNotNull())
+
+            viewModel.init()
+
+            viewModel.state.test {
+                skipItems(1)
+
+                tickerFlow.update { tickers.right() }
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = tickers,
+                        error = null,
+                    ),
+                    awaitItem(),
+                )
+
+                tickerFlow.update { Unit.left() }
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = tickers,
+                        error = Unit,
+                    ),
+                    awaitItem(),
+                )
+
+                val newTickers = randomTickers.toImmutableList()
+                tickerFlow.update { newTickers.right() }
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = newTickers,
+                        error = null
+                    ),
+                    awaitItem(),
+                )
+            }
         }
     }
 
-    @Test
-    fun `observe tickers error`() = runTest {
-        val viewModel = viewModel(tickers = Unit.left())
+    @Nested
+    inner class Search {
 
-        viewModel.init()
+        @Test
+        fun `search tickers`() = runTest {
+            val tickers = randomTickers.toImmutableList()
+            val query = tickers.first().ticker
+            val viewModel = viewModel(tickers = tickers.right())
 
-        viewModel.state.test {
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = persistentListOf(),
-                    error = Unit,
-                ),
-                awaitItem(),
-            )
+            viewModel.init()
+
+            viewModel.state.test {
+                skipItems(1)
+
+                assertSearched(viewModel, query, tickers)
+            }
         }
-    }
 
-    @Test
-    fun `when error occurs still show stale data`() = runTest {
-        val tickers = randomTickers.toImmutableList()
-        val tickerFlow = MutableStateFlow<Either<Unit, ImmutableList<Ticker>>?>(null)
-        val viewModel = viewModel(tickersFlow = tickerFlow.filterNotNull())
+        @Test
+        fun `search multiple times`() = runTest {
+            val tickers = randomTickers.toImmutableList()
+            val viewModel = viewModel(tickers = tickers.right())
 
-        viewModel.init()
+            viewModel.init()
 
-        viewModel.state.test {
-            skipItems(1)
+            viewModel.state.test {
+                skipItems(1)
 
-            tickerFlow.update { tickers.right() }
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = tickers,
-                    error = null,
-                ),
-                awaitItem(),
-            )
-
-            tickerFlow.update { Unit.left() }
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = tickers,
-                    error = Unit,
-                ),
-                awaitItem(),
-            )
+                assertSearched(viewModel, "a", tickers)
+                assertSearched(viewModel, "b", tickers)
+                assertSearched(viewModel, "c", tickers)
+            }
         }
-    }
 
-    @Test
-    fun `error is null when tickers are successfully observed`() = runTest {
-        val tickers = randomTickers.toImmutableList()
-        val tickerFlow = MutableStateFlow<Either<Unit, ImmutableList<Ticker>>?>(null)
-        val viewModel = viewModel(tickersFlow = tickerFlow.filterNotNull())
-
-        viewModel.init()
-
-        viewModel.state.test {
-            skipItems(1)
-
-            tickerFlow.update { Unit.left() }
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = persistentListOf(),
-                    error = Unit,
-                ),
-                awaitItem(),
-            )
-
-            tickerFlow.update { tickers.right() }
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = tickers,
-                    error = null,
-                ),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
-    fun `success, error, success`() = runTest {
-        val tickers = randomTickers.toImmutableList()
-        val tickerFlow = MutableStateFlow<Either<Unit, ImmutableList<Ticker>>?>(null)
-        val viewModel = viewModel(tickersFlow = tickerFlow.filterNotNull())
-
-        viewModel.init()
-
-        viewModel.state.test {
-            skipItems(1)
-
-            tickerFlow.update { tickers.right() }
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = tickers,
-                    error = null,
-                ),
-                awaitItem(),
-            )
-
-            tickerFlow.update { Unit.left() }
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = tickers,
-                    error = Unit,
-                ),
-                awaitItem(),
-            )
-
-            val newTickers = randomTickers.toImmutableList()
-            tickerFlow.update { newTickers.right() }
-            assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = newTickers,
-                    error = null
-                ),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
-    fun `search tickers`() = runTest {
-        val tickers = randomTickers.toImmutableList()
-        val query = tickers.first().ticker
-        val viewModel = viewModel(tickers = tickers.right())
-
-        viewModel.init()
-
-        viewModel.state.test {
-            skipItems(1)
-
-            assertSearched(viewModel, query, tickers)
-        }
-    }
-
-    @Test
-    fun `search multiple times`() = runTest {
-        val tickers = randomTickers.toImmutableList()
-        val viewModel = viewModel(tickers = tickers.right())
-
-        viewModel.init()
-
-        viewModel.state.test {
-            skipItems(1)
-
-            assertSearched(viewModel, "a", tickers)
-            assertSearched(viewModel, "b", tickers)
-            assertSearched(viewModel, "c", tickers)
-        }
-    }
-
-    private suspend fun TurbineTestContext<TradingState>.assertSearched(
-        viewModel: TradingViewModel,
-        query: String,
-        tickers: ImmutableList<Ticker>,
-    ) {
-        viewModel.search(query)
-
-        assertEquals(
-            TradingState(
-                connectivityStatus = ConnectivityStatus.Available,
-                tickers = tickers.search(query),
-                query = query,
-                error = null,
-            ),
-            awaitItem()
-        )
-    }
-
-    @Test
-    fun `restore query after process death`() = runTest {
-        val tickers = randomTickers.toImmutableList()
-        val query = tickers.first().ticker
-        val viewModel = viewModel(tickers = tickers.right())
-
-        viewModel.init()
-
-        viewModel.state.test {
-            skipItems(1)
-
+        private suspend fun TurbineTestContext<TradingState>.assertSearched(
+            viewModel: TradingViewModel,
+            query: String,
+            tickers: ImmutableList<Ticker>,
+        ) {
             viewModel.search(query)
 
             assertEquals(
@@ -283,6 +267,31 @@ class TradingViewModelTest {
                 ),
                 awaitItem()
             )
+        }
+
+        @Test
+        fun `restore query after process death`() = runTest {
+            val tickers = randomTickers.toImmutableList()
+            val query = tickers.first().ticker
+            val viewModel = viewModel(tickers = tickers.right())
+
+            viewModel.init()
+
+            viewModel.state.test {
+                skipItems(1)
+
+                viewModel.search(query)
+
+                assertEquals(
+                    TradingState(
+                        connectivityStatus = ConnectivityStatus.Available,
+                        tickers = tickers.search(query),
+                        query = query,
+                        error = null,
+                    ),
+                    awaitItem()
+                )
+            }
         }
     }
 }
