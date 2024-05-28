@@ -39,15 +39,16 @@ class TradingViewModel @Inject constructor(
     private val observeTickers: ObserveTickers,
 ) : ViewModel(coroutineScope) {
     private val query = savedStateHandle.getStateFlow(QUERY, "")
+    private val comparator = MutableStateFlow(compareByDescending<Ticker> { it.price })
 
     private val _state = MutableStateFlow(TradingState())
-    val state = combine(_state, query) { tradingState, query ->
+    val state = combine(_state, query, comparator) { tradingState, query, comparator ->
         tradingState.copy(
             tickers =
             tradingState
                 .tickers
                 .search(query)
-                .sortedByDescending { it.price }
+                .sortedWith(comparator)
                 .toImmutableList(),
             query = query,
         )

@@ -313,10 +313,7 @@ class TradingViewModelTest {
             viewModel.init()
 
             viewModel.state.test {
-                assertEquals(
-                    tickersDescendingPrice,
-                    awaitItem().tickers,
-                )
+                assertEquals(tickersDescendingPrice, awaitItem().tickers)
             }
         }
     }
