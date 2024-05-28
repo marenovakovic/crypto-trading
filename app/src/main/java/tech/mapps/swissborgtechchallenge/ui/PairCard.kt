@@ -36,7 +36,7 @@ fun PairCard(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.fillMaxWidth(fraction = 0.4f),
             ) {
-                Row(verticalAlignment = Alignment.Bottom) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = ticker.ticker)
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
