@@ -2,7 +2,7 @@
 
 package tech.mapps.swissborgtechchallenge.ui
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -47,37 +48,54 @@ fun TradingScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         content = { innerPadding ->
-            Box(
-                modifier = modifier
+            Column(
+                modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding),
+                    .padding(innerPadding)
+                    .padding(vertical = 8.dp),
             ) {
-                Column(modifier = Modifier.padding(8.dp)) {
-                    OutlinedTextField(
-                        label = { Text(text = stringResource(R.string.ticker)) },
-                        value = state.query,
-                        onValueChange = viewModel::search,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color = MaterialTheme.colorScheme.background),
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    LazyColumn {
-                        items(state.tickers) { ticker ->
-                            TickerCard(
-                                ticker = ticker,
-                                modifier = Modifier.padding(bottom = 8.dp),
-                            )
-                        }
-                    }
-                }
-                AnimatedVisibility(
-                    visible = state.connectivityStatus == ConnectivityStatus.Unavailable,
-                    enter = slideInVertically() + fadeIn(),
-                    exit = slideOutVertically() + fadeOut(),
-                    modifier = Modifier.align(Alignment.BottomCenter),
+                OutlinedTextField(
+                    label = { Text(text = stringResource(R.string.ticker)) },
+                    value = state.query,
+                    onValueChange = viewModel::search,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                        .background(color = MaterialTheme.colorScheme.background),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize(),
                 ) {
-                    InternetWarning()
+                    Crossfade(
+                        targetState = state,
+                        label = "TradingScreen cross-fade",
+                    ) { targetState ->
+                        if (targetState.isLoading)
+                            CircularProgressIndicator()
+                        else
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 8.dp),
+                            ) {
+                                items(targetState.tickers) { ticker ->
+                                    TickerCard(
+                                        ticker = ticker,
+                                        modifier = Modifier.padding(bottom = 8.dp),
+                                    )
+                                }
+                            }
+                    }
+                    androidx.compose.animation.AnimatedVisibility(
+                        visible = state.connectivityStatus == ConnectivityStatus.Unavailable || state.error != null,
+                        enter = slideInVertically { it } + fadeIn(),
+                        exit = slideOutVertically { it } + fadeOut(),
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                    ) {
+                        ErrorWidget(tradingState = state)
+                    }
                 }
             }
         },

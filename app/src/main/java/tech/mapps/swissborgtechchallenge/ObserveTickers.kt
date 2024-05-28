@@ -25,5 +25,5 @@ class ObserveTickersImpl @Inject constructor(
         Either
             .catch { api.getTickers() }
             .map { dtos -> dtos.map { it.toTicker() }.toImmutableList() }
-            .mapLeft { it.printStackTrace() }
+            .mapLeft {}
 }

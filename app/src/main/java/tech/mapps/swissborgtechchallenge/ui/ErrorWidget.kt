@@ -12,10 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import tech.mapps.swissborgtechchallenge.ConnectivityStatus
 import tech.mapps.swissborgtechchallenge.R
+import tech.mapps.swissborgtechchallenge.TradingState
 
 @Composable
-fun InternetWarning(modifier: Modifier = Modifier) {
+fun ErrorWidget(
+    tradingState: TradingState,
+    modifier: Modifier = Modifier,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -25,8 +30,14 @@ fun InternetWarning(modifier: Modifier = Modifier) {
         CompositionLocalProvider(
             LocalTextStyle provides LocalTextStyle.current.copy(color = Color.White)
         ) {
-            Text(text = stringResource(id = R.string.internet_connection_is_unavailable))
-            Text(text = stringResource(R.string.you_are_seeing_old_data))
+            when {
+                tradingState.connectivityStatus == ConnectivityStatus.Unavailable ->
+                    Text(text = stringResource(id = R.string.internet_connection_is_unavailable))
+                tradingState.error != null ->
+                    Text(text = stringResource(R.string.error_occurred))
+            }
+            if (tradingState.tickers.isNotEmpty())
+                Text(text = stringResource(R.string.you_are_seeing_old_data))
         }
     }
 }

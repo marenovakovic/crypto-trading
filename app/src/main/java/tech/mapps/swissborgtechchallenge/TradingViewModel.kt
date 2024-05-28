@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,7 +24,13 @@ data class TradingState(
     val tickers: ImmutableList<Ticker> = persistentListOf(),
     val query: String = "",
     val error: Unit? = null,
-)
+) {
+    val isLoading =
+        connectivityStatus != ConnectivityStatus.Unavailable &&
+                error == null &&
+                tickers.isEmpty() &&
+                query.isBlank()
+}
 
 @HiltViewModel
 class TradingViewModel @Inject constructor(
