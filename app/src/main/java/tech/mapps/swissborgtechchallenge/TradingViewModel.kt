@@ -43,7 +43,12 @@ class TradingViewModel @Inject constructor(
     private val _state = MutableStateFlow(TradingState())
     val state = combine(_state, query) { tradingState, query ->
         tradingState.copy(
-            tickers = tradingState.tickers.search(query),
+            tickers =
+            tradingState
+                .tickers
+                .search(query)
+                .sortedByDescending { it.price }
+                .toImmutableList(),
             query = query,
         )
     }
