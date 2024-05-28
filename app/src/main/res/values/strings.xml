@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">swissborg-tech-challenge</string>
+    <string name="ticker">Ticker</string>
 </resources>
