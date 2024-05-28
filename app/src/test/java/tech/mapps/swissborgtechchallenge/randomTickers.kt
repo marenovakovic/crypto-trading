@@ -9,10 +9,6 @@ val randomTickers: List<Ticker>
             ticker = it.toString(),
             currency = it.toString(),
             price = "",
-            dailyVolume = "",
-            dailyHigh = "",
-            dailyLow = "",
-            change24h = 0f,
             change24hPercentage = 0f,
         )
     }

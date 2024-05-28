@@ -12,7 +12,7 @@ fun TickerDto.toTicker() =
     )
 
 private val String.tickerSymbol
-    get() = split(currency).first().drop(1)
+    get() = trim('"').split(currency).first().drop(1).trimEnd(':')
 
 private const val currency = "USD"
 

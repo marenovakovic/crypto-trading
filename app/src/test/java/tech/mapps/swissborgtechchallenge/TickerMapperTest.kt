@@ -7,12 +7,15 @@ class TickerMapperTest {
 
     @Test
     fun `remove t and split ticker and currency`() {
-        val dto = GenericTickerDto("tBTCUSD")
+        val tickerOne = GenericTickerDto("tBTCUSD").toTicker()
 
-        val ticker = dto.toTicker()
+        assertEquals("BTC", tickerOne.ticker)
+        assertEquals("USD", tickerOne.currency)
 
-        assertEquals("BTC", ticker.ticker)
-        assertEquals("USD", ticker.currency)
+        val tickerTwo = GenericTickerDto("\"tBTC:USD\"").toTicker()
+
+        assertEquals("BTC", tickerTwo.ticker)
+        assertEquals("USD", tickerTwo.currency)
     }
 
     @Test
