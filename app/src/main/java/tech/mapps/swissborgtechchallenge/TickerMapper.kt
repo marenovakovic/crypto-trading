@@ -11,5 +11,5 @@ fun TickerDto.toTicker() =
         dailyHigh = dailyHigh.toString(),
         dailyLow = dailyLow.toString(),
         change24h = dailyChange.toString(),
-        change24hPercentage = (dailyChangePercentage * 100).toString(),
+        change24hPercentage = (dailyChangePercentage * 100),
     )

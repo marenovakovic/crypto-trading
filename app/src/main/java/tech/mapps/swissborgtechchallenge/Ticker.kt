@@ -8,5 +8,5 @@ data class Ticker(
     val dailyHigh: String,
     val dailyLow: String,
     val change24h: String,
-    val change24hPercentage: String,
+    val change24hPercentage: Float,
 )
