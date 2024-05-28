@@ -12,8 +12,8 @@ val randomTickers: List<Ticker>
             dailyVolume = "",
             dailyHigh = "",
             dailyLow = "",
-            change24h = "",
-            change24hPercentage = "",
+            change24h = 0f,
+            change24hPercentage = 0f,
         )
     }
 

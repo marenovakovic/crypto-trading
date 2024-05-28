@@ -92,7 +92,7 @@ private fun PairCardPreview() {
         dailyVolume = "132000",
         dailyHigh = "70000",
         dailyLow = "69000",
-        change24h = "",
+        change24h = 0f,
         change24hPercentage = 2.1f,
     )
     SwissborgTechChallengeTheme {

@@ -1,15 +1,30 @@
 package tech.mapps.swissborgtechchallenge
 
+import java.math.RoundingMode
 import tech.mapps.swissborgtechchallenge.api.TickerDto
 
 fun TickerDto.toTicker() =
     Ticker(
-        ticker = symbol,
-        currency = symbol,
-        price = lastTradePrice.toString(),
-        dailyVolume = dailyVolume.toString(),
-        dailyHigh = dailyHigh.toString(),
-        dailyLow = dailyLow.toString(),
-        change24h = dailyChange.toString(),
-        change24hPercentage = (dailyChangePercentage * 100),
+        ticker = symbol.tickerSymbol,
+        currency = currency,
+        price = lastTradePrice.roundToTwoDecimalsWithCurrency(),
+        dailyVolume = dailyVolume.roundToTwoDecimals().toString(),
+        dailyHigh = dailyHigh.roundToTwoDecimalsWithCurrency(),
+        dailyLow = dailyLow.roundToTwoDecimalsWithCurrency(),
+        change24h = dailyChange,
+        change24hPercentage = dailyChangePercentage.percentage,
     )
+
+private val String.tickerSymbol
+    get() = split(currency).first().drop(1)
+
+private const val currency = "USD"
+
+private fun Float.roundToTwoDecimals() =
+    toBigDecimal().setScale(2, RoundingMode.HALF_DOWN)
+
+private fun Float.roundToTwoDecimalsWithCurrency() =
+    roundToTwoDecimals().toString() + " $currency"
+
+private val Float.percentage
+    get() = "%.2f".format(this * 100).toFloat()
