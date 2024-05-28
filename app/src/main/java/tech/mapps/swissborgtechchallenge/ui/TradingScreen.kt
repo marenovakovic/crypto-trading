@@ -3,6 +3,7 @@
 package tech.mapps.swissborgtechchallenge.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.mapps.swissborgtechchallenge.TradingViewModel
 
@@ -45,9 +47,15 @@ fun TradingScreen(
             )
         },
         content = { innerPadding ->
-            LazyColumn(modifier = Modifier.padding(innerPadding)) {
+            LazyColumn(
+                contentPadding = PaddingValues(8.dp),
+                modifier = Modifier.padding(innerPadding),
+            ) {
                 items(state.tickers) { ticker ->
-                    PairCard(ticker = ticker)
+                    PairCard(
+                        ticker = ticker,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
                 }
             }
         },
