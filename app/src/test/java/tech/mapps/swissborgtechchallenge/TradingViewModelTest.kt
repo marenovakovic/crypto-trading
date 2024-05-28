@@ -298,17 +298,16 @@ class TradingViewModelTest {
     @Nested
     inner class Sorting {
 
-        private val tickers =
+        private val tickersAscendingPrice =
             persistentListOf(
                 Ticker(ticker = "a", price = "1", change24hPercentage = 1f),
                 Ticker(ticker = "b", price = "2", change24hPercentage = 1f),
                 Ticker(ticker = "c", price = "3", change24hPercentage = 1f),
             )
+        private val tickersDescendingPrice = tickersAscendingPrice.reversed().toImmutableList()
 
         @Test
         fun `initially tickers are sorted by descending price`() = runTest {
-            val tickersAscendingPrice = tickers
-            val tickersDescendingPrice = tickers.reversed().toImmutableList()
             val viewModel = viewModel(tickers = tickersAscendingPrice.right())
 
             viewModel.init()
