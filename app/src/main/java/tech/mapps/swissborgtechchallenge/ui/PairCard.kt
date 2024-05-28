@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,19 +36,33 @@ fun PairCard(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.fillMaxWidth(fraction = 0.4f),
             ) {
-                Row {
+                Row(verticalAlignment = Alignment.Bottom) {
                     Text(text = ticker.ticker)
-                    Text(text = "/")
-                    Text(text = ticker.currency)
+                    Text(
+                        style = MaterialTheme.typography.bodyLarge,
+                        text = "/${ticker.currency}",
+                        modifier = Modifier.alpha(0.56f),
+                    )
                 }
-                Text(text = ticker.dailyVolume)
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    text = ticker.dailyVolume,
+                    modifier = Modifier.alpha(0.56f),
+                )
             }
             Column(
                 horizontalAlignment = Alignment.End,
                 modifier = Modifier.fillMaxWidth(fraction = 0.5f),
             ) {
-                Text(text = ticker.dailyHigh)
-                Text(text = ticker.dailyLow)
+                Text(
+                    style = MaterialTheme.typography.titleLarge,
+                    text = ticker.dailyHigh,
+                )
+                Text(
+                    style = MaterialTheme.typography.titleMedium.copy(),
+                    text = ticker.dailyLow,
+                    modifier = Modifier.alpha(0.56f),
+                )
             }
             Spacer(modifier = Modifier.width(16.dp))
             Surface(
