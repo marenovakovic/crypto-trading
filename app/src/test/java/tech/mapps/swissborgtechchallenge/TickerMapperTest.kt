@@ -10,12 +10,10 @@ class TickerMapperTest {
         val tickerOne = GenericTickerDto("tBTCUSD").toTicker()
 
         assertEquals("BTC", tickerOne.ticker)
-        assertEquals("USD", tickerOne.currency)
 
         val tickerTwo = GenericTickerDto("\"tBTC:USD\"").toTicker()
 
         assertEquals("BTC", tickerTwo.ticker)
-        assertEquals("USD", tickerTwo.currency)
     }
 
     @Test

@@ -7,7 +7,6 @@ val randomTickers: List<Ticker>
     get() = List(Random.nextInt(1, 5)) {
         Ticker(
             ticker = it.toString(),
-            currency = it.toString(),
             price = "",
             change24hPercentage = 0f,
         )

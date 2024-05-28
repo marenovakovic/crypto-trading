@@ -6,7 +6,6 @@ import tech.mapps.swissborgtechchallenge.api.TickerDto
 fun TickerDto.toTicker() =
     Ticker(
         ticker = symbol.tickerSymbol,
-        currency = currency,
         price = lastTradePrice.roundToTwoDecimalsWithCurrency(),
         change24hPercentage = dailyChangePercentage.percentage,
     )
