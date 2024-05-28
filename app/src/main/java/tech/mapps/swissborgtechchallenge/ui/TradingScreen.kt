@@ -75,9 +75,7 @@ fun TradingScreen(
                     Text(text = stringResource(R.string.name))
                     Text(text = stringResource(R.string.price))
                 }
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
+                Box(modifier = Modifier.fillMaxSize()) {
                     Crossfade(
                         targetState = state,
                         label = "TradingScreen cross-fade",
