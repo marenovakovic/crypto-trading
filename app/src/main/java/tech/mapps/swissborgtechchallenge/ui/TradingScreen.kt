@@ -8,8 +8,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -64,6 +66,15 @@ fun TradingScreen(
                         .background(color = MaterialTheme.colorScheme.background),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 2.dp),
+                ) {
+                    Text(text = stringResource(R.string.name))
+                    Text(text = stringResource(R.string.price))
+                }
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxSize(),

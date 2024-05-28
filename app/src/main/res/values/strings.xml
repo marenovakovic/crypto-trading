@@ -4,4 +4,6 @@
     <string name="internet_connection_is_unavailable">Internet connection is unavailable</string>
     <string name="you_are_seeing_old_data">You are seeing old data</string>
     <string name="error_occurred">Error occurred</string>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
 </resources>
