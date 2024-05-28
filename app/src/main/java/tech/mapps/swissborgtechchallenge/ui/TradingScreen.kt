@@ -76,7 +76,6 @@ fun TradingScreen(
                     Text(text = stringResource(R.string.price))
                 }
                 Box(
-                    contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     Crossfade(
@@ -84,7 +83,12 @@ fun TradingScreen(
                         label = "TradingScreen cross-fade",
                     ) { targetState ->
                         if (targetState.isLoading)
-                            CircularProgressIndicator()
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.fillMaxSize(),
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         else
                             LazyColumn(
                                 modifier = Modifier
