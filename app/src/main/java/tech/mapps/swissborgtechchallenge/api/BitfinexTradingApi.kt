@@ -8,9 +8,9 @@ import io.ktor.client.request.url
 import javax.inject.Inject
 
 private const val pairs =
-    "tBTCUSD,tETHUSD,tCHSB:USD,tLTCUSD,tXRPUSD,tDSHUSD,tRRTUSD," +
+    "tBTCUSD,tETHUSD,tCHSB:USD,tLTCUSD,tXRPUSD,tTONUSD,tSOLUSD," +
             "tEOSUSD,tSANUSD,tDATUSD,tSNTUSD,tDOGE:USD,tLUNA:USD,tMATIC:USD," +
-            "tNEXO:USD,tOCEAN:USD,tBEST:USD,tAAVE:USD,tPLUUSD,tFILUSD"
+            "tNEXO:USD,tDOGE:USD,tLINK:USD,tAAVE:USD,tDOTUSD,tFILUSD"
 
 class BitfinexTradingApi @Inject constructor(
     private val httpClient: HttpClient,
