@@ -12,9 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.collections.immutable.persistentListOf
 import tech.mapps.swissborgtechchallenge.ConnectivityStatus
 import tech.mapps.swissborgtechchallenge.R
+import tech.mapps.swissborgtechchallenge.Ticker
 import tech.mapps.swissborgtechchallenge.TradingState
+import tech.mapps.swissborgtechchallenge.ui.theme.SwissborgTechChallengeTheme
 
 @Composable
 fun ErrorWidget(
@@ -39,5 +43,71 @@ fun ErrorWidget(
             if (tradingState.tickers.isNotEmpty())
                 Text(text = stringResource(R.string.you_are_seeing_old_data))
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ErrorWidgetNoInternetPreview() {
+    SwissborgTechChallengeTheme {
+        ErrorWidget(
+            tradingState = TradingState(
+                connectivityStatus = ConnectivityStatus.Unavailable,
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ErrorWidgetNoInternetOldDataPreview() {
+    val tickers = persistentListOf(
+        Ticker(
+            ticker = "BTC",
+            price = "69362",
+            change24hPercentage = 1.9f,
+        ),
+    )
+    SwissborgTechChallengeTheme {
+        ErrorWidget(
+            tradingState = TradingState(
+                connectivityStatus = ConnectivityStatus.Unavailable,
+                tickers = tickers,
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ErrorWidgetGenericErrorPreview() {
+    SwissborgTechChallengeTheme {
+        ErrorWidget(
+            tradingState = TradingState(
+                connectivityStatus = ConnectivityStatus.Available,
+                error = Unit,
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ErrorWidgetGenericErrorOldDataPreview() {
+    val tickers = persistentListOf(
+        Ticker(
+            ticker = "BTC",
+            price = "69362",
+            change24hPercentage = 1.9f,
+        ),
+    )
+    SwissborgTechChallengeTheme {
+        ErrorWidget(
+            tradingState = TradingState(
+                connectivityStatus = ConnectivityStatus.Available,
+                tickers = tickers,
+                error = Unit,
+            ),
+        )
     }
 }
