@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -43,20 +44,21 @@ fun TickerCard(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     text = ticker.ticker,
                 )
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge.copy(
+                    style = MaterialTheme.typography.titleMedium.copy(
                         color =
                         if (ticker.change24hPercentage > 0) Color(0XFF12B32D)
                         else Color(0xFFCC3F29),
                     ),
                     text = "${ticker.change24hPercentage.sign()}${ticker.change24hPercentage}%",
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     style = MaterialTheme.typography.titleMedium,
                     text = ticker.price,
