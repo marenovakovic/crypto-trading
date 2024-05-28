@@ -43,6 +43,7 @@ class TradingViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(TradingState())
     val state = combine(_state, query, comparator) { tradingState, query, comparator ->
+        println(comparator)
         tradingState.copy(
             tickers =
             tradingState
@@ -81,6 +82,10 @@ class TradingViewModel @Inject constructor(
 
     fun search(query: String) {
         savedStateHandle[QUERY] = query
+    }
+
+    fun sortByPrice() {
+        comparator.update { it.reversed() }
     }
 
     companion object {
