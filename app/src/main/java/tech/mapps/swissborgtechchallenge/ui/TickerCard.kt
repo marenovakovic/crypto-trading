@@ -70,10 +70,6 @@ private fun TickerCardPositiveChangePreview() {
         ticker = "BTC",
         currency = "USD",
         price = "69863 USD",
-        dailyVolume = "132000",
-        dailyHigh = "70000 USD",
-        dailyLow = "69000 USD",
-        change24h = 0f,
         change24hPercentage = 2.10f,
     )
     SwissborgTechChallengeTheme {
@@ -88,10 +84,6 @@ private fun TickerCardNegativeChangePreview() {
         ticker = "ETH",
         currency = "USD",
         price = "3981 USD",
-        dailyVolume = "132000",
-        dailyHigh = "3900 USD",
-        dailyLow = "3800 USD",
-        change24h = 0f,
         change24hPercentage = -1.80f,
     )
     SwissborgTechChallengeTheme {

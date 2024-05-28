@@ -8,10 +8,6 @@ fun TickerDto.toTicker() =
         ticker = symbol.tickerSymbol,
         currency = currency,
         price = lastTradePrice.roundToTwoDecimalsWithCurrency(),
-        dailyVolume = dailyVolume.roundToTwoDecimals().toString(),
-        dailyHigh = dailyHigh.roundToTwoDecimalsWithCurrency(),
-        dailyLow = dailyLow.roundToTwoDecimalsWithCurrency(),
-        change24h = dailyChange,
         change24hPercentage = dailyChangePercentage.percentage,
     )
 
