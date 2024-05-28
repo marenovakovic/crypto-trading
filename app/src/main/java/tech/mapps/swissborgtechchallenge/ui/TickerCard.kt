@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,7 +19,7 @@ import tech.mapps.swissborgtechchallenge.Ticker
 import tech.mapps.swissborgtechchallenge.ui.theme.SwissborgTechChallengeTheme
 
 @Composable
-fun PairCard(
+fun TickerCard(
     ticker: Ticker,
     modifier: Modifier = Modifier,
 ) {
@@ -66,7 +65,7 @@ private fun Float.sign() = if (this > 0) "+" else ""
 
 @Preview
 @Composable
-private fun PairCardPositiveChangePreview() {
+private fun TickerCardPositiveChangePreview() {
     val ticker = Ticker(
         ticker = "BTC",
         currency = "USD",
@@ -78,13 +77,13 @@ private fun PairCardPositiveChangePreview() {
         change24hPercentage = 2.10f,
     )
     SwissborgTechChallengeTheme {
-        PairCard(ticker = ticker)
+        TickerCard(ticker = ticker)
     }
 }
 
 @Preview
 @Composable
-private fun PairCardNegativeChangePreview() {
+private fun TickerCardNegativeChangePreview() {
     val ticker = Ticker(
         ticker = "ETH",
         currency = "USD",
@@ -96,6 +95,6 @@ private fun PairCardNegativeChangePreview() {
         change24hPercentage = -1.80f,
     )
     SwissborgTechChallengeTheme {
-        PairCard(ticker = ticker)
+        TickerCard(ticker = ticker)
     }
 }

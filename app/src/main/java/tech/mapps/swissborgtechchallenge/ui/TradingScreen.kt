@@ -52,7 +52,7 @@ fun TradingScreen(
                 modifier = Modifier.padding(innerPadding),
             ) {
                 items(state.tickers) { ticker ->
-                    PairCard(
+                    TickerCard(
                         ticker = ticker,
                         modifier = Modifier.padding(bottom = 8.dp),
                     )
