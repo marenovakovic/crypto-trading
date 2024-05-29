@@ -1,0 +1,77 @@
+stable class App {
+  <runtime stability> = Stable
+}
+stable class Available {
+  <runtime stability> = Stable
+}
+stable class Unavailable {
+  <runtime stability> = Stable
+}
+unstable class ConnectivityStatusTrackerImpl {
+  unstable val connectivityManager: ConnectivityManager
+  <runtime stability> = Unstable
+}
+stable class MainActivity {
+  <runtime stability> = Stable
+}
+runtime class ObserveTickersImpl {
+  runtime val api: CryptoTradingApi
+  stable val period: Duration
+  <runtime stability> = Uncertain(CryptoTradingApi)
+}
+stable class Ticker {
+  stable val ticker: String
+  stable val price: String
+  stable val change24hPercentage: Float
+  <runtime stability> = Stable
+}
+stable class TradingState {
+  stable val allTickers: ImmutableList<Ticker>
+  runtime val connectivityStatus: ConnectivityStatus?
+  stable val tickerSorting: TickerSorting
+  stable val query: String
+  stable val error: Unit?
+  stable val isLoading: Boolean
+  stable val tickers: ImmutableList<Ticker>
+  <runtime stability> = 
+}
+unstable class TradingViewModel {
+  unstable val savedStateHandle: SavedStateHandle
+  runtime val connectivityStatusTracker: ConnectivityStatusTracker
+  runtime val observeTickers: ObserveTickers
+  unstable val query: StateFlow<String>
+  unstable val _state: MutableStateFlow<TradingState>
+  unstable val state: StateFlow<TradingState>
+  <runtime stability> = Unstable
+}
+stable class BitfinexTicker {
+  stable val symbol: String
+  stable val priceOfLastHighestBid: Float
+  stable val sumOf25HighestBids: Float
+  stable val lastLowestAsk: Float
+  stable val sumOf25LowestAsks: Float
+  stable val dailyChange: Float
+  stable val dailyChangePercentage: Float
+  stable val lastTradePrice: Float
+  stable val dailyVolume: Float
+  stable val dailyHigh: Float
+  stable val dailyLow: Float
+  <runtime stability> = Stable
+}
+unstable class BitfinexTickerSerializer {
+  unstable val descriptor: SerialDescriptor
+  <runtime stability> = Unstable
+}
+unstable class BitfinexTradingApi {
+  unstable val httpClient: HttpClient
+  <runtime stability> = Unstable
+}
+stable class HttpModule {
+  <runtime stability> = Stable
+}
+stable class ColorFamily {
+  stable val color: Color
+  stable val onColor: Color
+  stable val colorContainer: Color
+  stable val onColorContainer: Color
+}
