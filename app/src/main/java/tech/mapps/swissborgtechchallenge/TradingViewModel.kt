@@ -62,15 +62,10 @@ class TradingViewModel @Inject constructor(
         }
     }
 
-    fun search(query: String) {
-        savedStateHandle[QUERY] = query
-    }
+    fun search(query: String) = savedStateHandle.set(QUERY, query)
 
-    fun sortByPrice() =
-        _state.update { it.sortByPrice() }
-
-    fun sortByName() =
-        _state.update { it.sortByName() }
+    fun sortByPrice() = _state.update { it.sortByPrice() }
+    fun sortByName() = _state.update { it.sortByName() }
 
     companion object {
         const val QUERY = "query"
