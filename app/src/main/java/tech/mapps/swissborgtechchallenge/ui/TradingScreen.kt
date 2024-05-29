@@ -7,39 +7,24 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.mapps.swissborgtechchallenge.ConnectivityStatus
-import tech.mapps.swissborgtechchallenge.R
-import tech.mapps.swissborgtechchallenge.TickerSorting
+import tech.mapps.swissborgtechchallenge.TradingState
 import tech.mapps.swissborgtechchallenge.TradingViewModel
 
 @Composable
@@ -51,84 +36,60 @@ fun TradingScreen(
 
     val state by viewModel.state.collectAsState()
 
+    TradingScreenContent(
+        tradingState = state,
+        queryTickers = viewModel::search,
+        sortByPrice = viewModel::sortByPrice,
+        sortByName = viewModel::sortByName,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun TradingScreenContent(
+    tradingState: TradingState,
+    queryTickers: (String) -> Unit,
+    sortByPrice: () -> Unit,
+    sortByName: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(vertical = 8.dp),
-            ) {
-                OutlinedTextField(
-                    label = { Text(text = stringResource(R.string.ticker)) },
-                    value = state.query,
-                    onValueChange = viewModel::search,
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                        .background(color = MaterialTheme.colorScheme.background),
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 2.dp),
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(vertical = 8.dp),
                 ) {
-                    RowLabel(
-                        text = stringResource(R.string.name),
-                        imageVector = when (state.tickerSorting) {
-                            TickerSorting.ByNameAscending -> Icons.Default.ArrowUpward
-                            TickerSorting.ByNameDescending -> Icons.Default.ArrowDownward
-                            else -> null
-                        },
-                        onClick = viewModel::sortByName,
+                    SearchField(
+                        query = tradingState.query,
+                        onQueryChange = queryTickers,
                     )
-                    RowLabel(
-                        text = stringResource(R.string.price),
-                        imageVector = when (state.tickerSorting) {
-                            TickerSorting.ByPriceAscending -> Icons.Default.ArrowUpward
-                            TickerSorting.ByPriceDescending -> Icons.Default.ArrowDownward
-                            else -> null
-                        },
-                        onClick = viewModel::sortByPrice,
-                    )
-                }
-                Box(modifier = Modifier.fillMaxSize()) {
+                    Spacer(modifier = Modifier.height(8.dp))
                     Crossfade(
-                        targetState = state,
+                        targetState = tradingState,
                         label = "TradingScreen cross-fade",
                     ) { targetState ->
                         if (targetState.isLoading)
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.fillMaxSize(),
-                            ) {
-                                CircularProgressIndicator()
-                            }
+                            LoadingIndicator()
                         else
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 8.dp),
-                            ) {
-                                items(targetState.tickers) { ticker ->
-                                    TickerCard(
-                                        ticker = ticker,
-                                        modifier = Modifier.padding(bottom = 8.dp),
-                                    )
-                                }
-                            }
+                            TickersList(
+                                tickers = tradingState.tickers,
+                                sorting = tradingState.tickerSorting,
+                                sortByPrice = sortByPrice,
+                                sortByName = sortByName,
+                            )
                     }
-                    androidx.compose.animation.AnimatedVisibility(
-                        visible = state.connectivityStatus == ConnectivityStatus.Unavailable || state.error != null,
-                        enter = slideInVertically { it } + fadeIn(),
-                        exit = slideOutVertically { it } + fadeOut(),
-                        modifier = Modifier.align(Alignment.BottomCenter),
-                    ) {
-                        ErrorWidget(tradingState = state)
-                    }
+                }
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = tradingState.connectivityStatus == ConnectivityStatus.Unavailable || tradingState.error != null,
+                    enter = slideInVertically { it } + fadeIn(),
+                    exit = slideOutVertically { it } + fadeOut(),
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                ) {
+                    ErrorWidget(tradingState = tradingState)
                 }
             }
         },
