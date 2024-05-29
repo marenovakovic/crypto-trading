@@ -13,16 +13,4 @@ enum class TickerSorting(private val comparator: Comparator<Ticker>) {
         tickers
             .sortedWith(this.comparator)
             .toImmutableList()
-
-    fun sortByPrice() =
-        when (this) {
-            ByPriceDescending -> ByPriceAscending
-            else -> ByPriceDescending
-        }
-
-    fun sortByName() =
-        when (this) {
-            ByNameAscending -> ByNameDescending
-            else -> ByNameAscending
-        }
 }
