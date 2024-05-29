@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -81,48 +83,24 @@ fun TradingScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 2.dp),
                 ) {
-                    Row(
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { viewModel.sortByName() },
-                        ),
-                    ) {
-                        Text(text = stringResource(R.string.name))
-                        Spacer(modifier = Modifier.width(2.dp))
-                        when (state.tickerSorting) {
-                            TickerSorting.ByNameAscending -> Icon(
-                                imageVector = Icons.Default.ArrowUpward,
-                                contentDescription = null,
-                            )
-                            TickerSorting.ByNameDescending -> Icon(
-                                imageVector = Icons.Default.ArrowDownward,
-                                contentDescription = null,
-                            )
-                            else -> Unit
-                        }
-                    }
-                    Row(
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { viewModel.sortByPrice() },
-                        ),
-                    ) {
-                        Text(text = stringResource(R.string.price))
-                        Spacer(modifier = Modifier.width(2.dp))
-                        when (state.tickerSorting) {
-                            TickerSorting.ByPriceAscending -> Icon(
-                                imageVector = Icons.Default.ArrowUpward,
-                                contentDescription = null,
-                            )
-                            TickerSorting.ByPriceDescending -> Icon(
-                                imageVector = Icons.Default.ArrowDownward,
-                                contentDescription = null,
-                            )
-                            else -> Unit
-                        }
-                    }
+                    RowLabel(
+                        text = stringResource(R.string.name),
+                        imageVector = when (state.tickerSorting) {
+                            TickerSorting.ByNameAscending -> Icons.Default.ArrowUpward
+                            TickerSorting.ByNameDescending -> Icons.Default.ArrowDownward
+                            else -> null
+                        },
+                        onClick = viewModel::sortByName,
+                    )
+                    RowLabel(
+                        text = stringResource(R.string.price),
+                        imageVector = when (state.tickerSorting) {
+                            TickerSorting.ByPriceAscending -> Icons.Default.ArrowUpward
+                            TickerSorting.ByPriceDescending -> Icons.Default.ArrowDownward
+                            else -> null
+                        },
+                        onClick = viewModel::sortByPrice,
+                    )
                 }
                 Box(modifier = Modifier.fillMaxSize()) {
                     Crossfade(
@@ -162,4 +140,29 @@ fun TradingScreen(
             }
         },
     )
+}
+
+@Composable
+private fun RowLabel(
+    text: String,
+    imageVector: ImageVector?,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = onClick,
+        ),
+    ) {
+        Text(text = text)
+        Spacer(modifier = Modifier.width(2.dp))
+        Box(modifier = Modifier.size(24.dp)) {
+            if (imageVector != null)
+                Icon(
+                    imageVector = imageVector,
+                    contentDescription = null,
+                )
+        }
+    }
 }
