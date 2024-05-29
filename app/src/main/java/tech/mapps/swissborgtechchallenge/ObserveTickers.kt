@@ -15,10 +15,10 @@ fun interface ObserveTickers : () -> Flow<Either<Unit, ImmutableList<Ticker>>>
 
 class ObserveTickersImpl @Inject constructor(
     private val api: CryptoTradingApi,
-    private val period: Duration = 5.seconds,
+    private val refreshInterval: Duration = 5.seconds,
 ) : ObserveTickers {
     override fun invoke(): Flow<Either<Unit, ImmutableList<Ticker>>> =
-        tickerFlow(period = period, initialDelay = ZERO)
+        tickerFlow(period = refreshInterval, initialDelay = ZERO)
             .mapLatest { getTickers() }
 
     private suspend fun getTickers() =
