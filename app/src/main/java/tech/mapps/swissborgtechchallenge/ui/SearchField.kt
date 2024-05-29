@@ -9,8 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.mapps.swissborgtechchallenge.R
+import tech.mapps.swissborgtechchallenge.ui.theme.SwissborgTechChallengeTheme
 
 @Composable
 fun SearchField(
@@ -26,4 +28,26 @@ fun SearchField(
             .padding(horizontal = 8.dp)
             .background(color = MaterialTheme.colorScheme.background),
     )
+}
+
+@Preview
+@Composable
+private fun SearchFieldEmptyPreview() {
+    SwissborgTechChallengeTheme {
+        SearchField(
+            query = "",
+            onQueryChange = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SearchFieldFilledInPreview() {
+    SwissborgTechChallengeTheme {
+        SearchField(
+            query = "BTC",
+            onQueryChange = {},
+        )
+    }
 }
