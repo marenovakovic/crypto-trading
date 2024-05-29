@@ -8,12 +8,12 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-class TickerFlowTest {
+class IntervalFlowTest {
 
     @Test
     fun `initial delay`() = runTest {
         val initialDelay = 500.milliseconds
-        val tickerFlow = tickerFlow(period = 1.seconds, initialDelay = initialDelay)
+        val tickerFlow = intervalFlow(interval = 1.seconds, initialDelay = initialDelay)
 
         var tickCount = 0
 
@@ -33,7 +33,7 @@ class TickerFlowTest {
     @Test
     fun period() = runTest {
         val period = 1.seconds
-        val tickerFlow = tickerFlow(period = period, initialDelay = Duration.ZERO)
+        val tickerFlow = intervalFlow(interval = period, initialDelay = Duration.ZERO)
 
         var count = 0
 
