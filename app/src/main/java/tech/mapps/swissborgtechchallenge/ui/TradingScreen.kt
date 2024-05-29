@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +18,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -36,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.mapps.swissborgtechchallenge.ConnectivityStatus
 import tech.mapps.swissborgtechchallenge.R
+import tech.mapps.swissborgtechchallenge.TickerSorting
 import tech.mapps.swissborgtechchallenge.TradingViewModel
 
 @Composable
@@ -72,8 +79,36 @@ fun TradingScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 2.dp),
                 ) {
-                    Text(text = stringResource(R.string.name))
-                    Text(text = stringResource(R.string.price))
+                    Row(modifier = Modifier.clickable { viewModel.sortByName() }) {
+                        Text(text = stringResource(R.string.name))
+                        Spacer(modifier = Modifier.width(2.dp))
+                        when (state.tickerSorting) {
+                            TickerSorting.ByNameAscending -> Icon(
+                                imageVector = Icons.Default.ArrowUpward,
+                                contentDescription = null,
+                            )
+                            TickerSorting.ByNameDescending -> Icon(
+                                imageVector = Icons.Default.ArrowDownward,
+                                contentDescription = null,
+                            )
+                            else -> Unit
+                        }
+                    }
+                    Row(modifier = Modifier.clickable { viewModel.sortByPrice() }) {
+                        Text(text = stringResource(R.string.price))
+                        Spacer(modifier = Modifier.width(2.dp))
+                        when (state.tickerSorting) {
+                            TickerSorting.ByPriceAscending -> Icon(
+                                imageVector = Icons.Default.ArrowUpward,
+                                contentDescription = null,
+                            )
+                            TickerSorting.ByPriceDescending -> Icon(
+                                imageVector = Icons.Default.ArrowDownward,
+                                contentDescription = null,
+                            )
+                            else -> Unit
+                        }
+                    }
                 }
                 Box(modifier = Modifier.fillMaxSize()) {
                     Crossfade(
