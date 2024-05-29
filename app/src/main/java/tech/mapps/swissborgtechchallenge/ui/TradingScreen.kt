@@ -9,6 +9,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,7 +81,13 @@ fun TradingScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 2.dp),
                 ) {
-                    Row(modifier = Modifier.clickable { viewModel.sortByName() }) {
+                    Row(
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { viewModel.sortByName() },
+                        ),
+                    ) {
                         Text(text = stringResource(R.string.name))
                         Spacer(modifier = Modifier.width(2.dp))
                         when (state.tickerSorting) {
@@ -94,7 +102,13 @@ fun TradingScreen(
                             else -> Unit
                         }
                     }
-                    Row(modifier = Modifier.clickable { viewModel.sortByPrice() }) {
+                    Row(
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { viewModel.sortByPrice() },
+                        ),
+                    ) {
                         Text(text = stringResource(R.string.price))
                         Spacer(modifier = Modifier.width(2.dp))
                         when (state.tickerSorting) {
