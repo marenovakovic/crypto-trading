@@ -5,7 +5,9 @@ import kotlinx.collections.immutable.toImmutableList
 
 enum class TickerSorting(private val comparator: Comparator<Ticker>) {
     ByPriceAscending(compareBy { it.price }),
-    ByPriceDescending(compareByDescending { it.price });
+    ByPriceDescending(compareByDescending { it.price }),
+    ByNameAscending(compareBy { it.ticker }),
+    ByNameDescending(compareByDescending { it.ticker });
 
     fun sort(tickers: ImmutableList<Ticker>) =
         tickers
@@ -15,6 +17,12 @@ enum class TickerSorting(private val comparator: Comparator<Ticker>) {
     fun sortByPrice() =
         when (this) {
             ByPriceDescending -> ByPriceAscending
-            ByPriceAscending -> ByPriceDescending
+            else -> ByPriceDescending
+        }
+
+    fun sortByName() =
+        when (this) {
+            ByNameAscending -> ByNameDescending
+            else -> ByNameAscending
         }
 }

@@ -300,11 +300,19 @@ class TradingViewModelTest {
 
         private val tickersAscendingPrice =
             persistentListOf(
-                Ticker(ticker = "a", price = "1", change24hPercentage = 1f),
-                Ticker(ticker = "b", price = "2", change24hPercentage = 1f),
-                Ticker(ticker = "c", price = "3", change24hPercentage = 1f),
+                Ticker(ticker = "z", price = "1", change24hPercentage = 1f),
+                Ticker(ticker = "f", price = "2", change24hPercentage = 1f),
+                Ticker(ticker = "a", price = "3", change24hPercentage = 1f),
             )
         private val tickersDescendingPrice = tickersAscendingPrice.reversed().toImmutableList()
+
+        private val tickersAscendingName =
+            persistentListOf(
+                Ticker(ticker = "a", price = "", change24hPercentage = 1f),
+                Ticker(ticker = "b", price = "", change24hPercentage = 1f),
+                Ticker(ticker = "c", price = "", change24hPercentage = 1f),
+            )
+        private val tickersDescendingName = tickersAscendingName.reversed().toImmutableList()
 
         @Test
         fun `initially tickers are sorted by descending price`() = runTest {
@@ -340,6 +348,32 @@ class TradingViewModelTest {
 
                 viewModel.state.test {
                     assertEquals(tickersDescendingPrice, awaitItem().tickers)
+                }
+            }
+
+        @Test
+        fun `calling sort by name on initial tickers sorts them by ascending name`() = runTest {
+            val viewModel = viewModel(tickers = tickersAscendingName.right())
+
+            viewModel.init()
+            viewModel.sortByName()
+
+            viewModel.state.test {
+                assertEquals(tickersAscendingName, awaitItem().tickers)
+            }
+        }
+
+        @Test
+        fun `calling sort by name after sorting initial tickers by name sorts them by descending name`() =
+            runTest {
+                val viewModel = viewModel(tickers = tickersAscendingName.right())
+
+                viewModel.init()
+                viewModel.sortByName()
+                viewModel.sortByName()
+
+                viewModel.state.test {
+                    assertEquals(tickersDescendingName, awaitItem().tickers)
                 }
             }
     }
