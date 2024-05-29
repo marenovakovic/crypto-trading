@@ -1,5 +1,5 @@
 package tech.mapps.swissborgtechchallenge.api
 
-interface CryptoTradingApi {
+fun interface CryptoTradingApi {
     suspend fun getTickers(): List<TickerDto>
 }
