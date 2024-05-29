@@ -72,7 +72,7 @@ private fun ErrorWidgetNoInternetOldDataPreview() {
         ErrorWidget(
             tradingState = TradingState(
                 connectivityStatus = ConnectivityStatus.Unavailable,
-                tickers = tickers,
+                allTickers = tickers,
             ),
         )
     }
@@ -105,7 +105,7 @@ private fun ErrorWidgetGenericErrorOldDataPreview() {
         ErrorWidget(
             tradingState = TradingState(
                 connectivityStatus = ConnectivityStatus.Available,
-                tickers = tickers,
+                allTickers = tickers,
                 error = Unit,
             ),
         )

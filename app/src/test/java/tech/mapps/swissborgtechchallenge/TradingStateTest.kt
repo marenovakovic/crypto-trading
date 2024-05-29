@@ -15,10 +15,10 @@ class TradingStateTest {
         assertFalse(TradingState(connectivityStatus = ConnectivityStatus.Unavailable).isLoading)
         assertFalse(TradingState(query = "non empty").isLoading)
         assertFalse(TradingState(error = Unit).isLoading)
-        assertFalse(TradingState(tickers = persistentListOf(Ticker("", "", 1f))).isLoading)
+        assertFalse(TradingState(allTickers = persistentListOf(Ticker("", "", 1f))).isLoading)
         assertFalse(
             TradingState(
-                tickers = persistentListOf(Ticker("", "", 1f)),
+                allTickers = persistentListOf(Ticker("", "", 1f)),
                 query = "non empty",
             ).isLoading,
         )

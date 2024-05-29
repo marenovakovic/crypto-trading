@@ -82,7 +82,7 @@ class TradingViewModelTest {
 
             viewModel.state.test {
                 assertEquals(
-                    TradingState(ConnectivityStatus.Available, tickers),
+                    TradingState(tickers, ConnectivityStatus.Available),
                     awaitItem(),
                 )
             }
@@ -98,7 +98,7 @@ class TradingViewModelTest {
                 assertEquals(
                     TradingState(
                         connectivityStatus = ConnectivityStatus.Available,
-                        tickers = persistentListOf(),
+                        allTickers = persistentListOf(),
                         error = Unit,
                     ),
                     awaitItem(),
@@ -121,7 +121,7 @@ class TradingViewModelTest {
                 assertEquals(
                     TradingState(
                         connectivityStatus = ConnectivityStatus.Available,
-                        tickers = tickers,
+                        allTickers = tickers,
                         error = null,
                     ),
                     awaitItem(),
@@ -131,7 +131,7 @@ class TradingViewModelTest {
                 assertEquals(
                     TradingState(
                         connectivityStatus = ConnectivityStatus.Available,
-                        tickers = tickers,
+                        allTickers = tickers,
                         error = Unit,
                     ),
                     awaitItem(),
@@ -154,7 +154,7 @@ class TradingViewModelTest {
                 assertEquals(
                     TradingState(
                         connectivityStatus = ConnectivityStatus.Available,
-                        tickers = persistentListOf(),
+                        allTickers = persistentListOf(),
                         error = Unit,
                     ),
                     awaitItem(),
@@ -164,7 +164,7 @@ class TradingViewModelTest {
                 assertEquals(
                     TradingState(
                         connectivityStatus = ConnectivityStatus.Available,
-                        tickers = tickers,
+                        allTickers = tickers,
                         error = null,
                     ),
                     awaitItem(),
@@ -187,7 +187,7 @@ class TradingViewModelTest {
                 assertEquals(
                     TradingState(
                         connectivityStatus = ConnectivityStatus.Available,
-                        tickers = tickers,
+                        allTickers = tickers,
                         error = null,
                     ),
                     awaitItem(),
@@ -197,7 +197,7 @@ class TradingViewModelTest {
                 assertEquals(
                     TradingState(
                         connectivityStatus = ConnectivityStatus.Available,
-                        tickers = tickers,
+                        allTickers = tickers,
                         error = Unit,
                     ),
                     awaitItem(),
@@ -208,7 +208,7 @@ class TradingViewModelTest {
                 assertEquals(
                     TradingState(
                         connectivityStatus = ConnectivityStatus.Available,
-                        tickers = newTickers,
+                        allTickers = newTickers,
                         error = null
                     ),
                     awaitItem(),
@@ -259,13 +259,8 @@ class TradingViewModelTest {
             viewModel.search(query)
 
             assertEquals(
-                TradingState(
-                    connectivityStatus = ConnectivityStatus.Available,
-                    tickers = tickers.search(query),
-                    query = query,
-                    error = null,
-                ),
-                awaitItem()
+                tickers.search(query),
+                awaitItem().tickers,
             )
         }
 
@@ -282,15 +277,7 @@ class TradingViewModelTest {
 
                 viewModel.search(query)
 
-                assertEquals(
-                    TradingState(
-                        connectivityStatus = ConnectivityStatus.Available,
-                        tickers = tickers.search(query),
-                        query = query,
-                        error = null,
-                    ),
-                    awaitItem()
-                )
+                assertEquals(tickers.search(query), awaitItem().tickers)
             }
         }
     }

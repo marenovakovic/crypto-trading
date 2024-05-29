@@ -19,16 +19,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class TradingState(
+    private val allTickers: ImmutableList<Ticker> = persistentListOf(),
     val connectivityStatus: ConnectivityStatus? = null,
-    val tickers: ImmutableList<Ticker> = persistentListOf(),
     val query: String = "",
     val error: Unit? = null,
 ) {
     val isLoading =
         connectivityStatus != ConnectivityStatus.Unavailable &&
                 error == null &&
-                tickers.isEmpty() &&
+                allTickers.isEmpty() &&
                 query.isBlank()
+
+    val tickers = allTickers.search(query).also { println(it) }
 }
 
 @HiltViewModel
@@ -43,13 +45,8 @@ class TradingViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(TradingState())
     val state = combine(_state, query, tickerSorting) { tradingState, query, tickerSorting ->
-        val searchedTickers =
-            tradingState
-                .tickers
-                .search(query)
-                .toImmutableList()
         tradingState.copy(
-            tickers = tickerSorting.sort(searchedTickers),
+            allTickers = tickerSorting.sort(tradingState.tickers),
             query = query,
         )
     }
@@ -71,7 +68,7 @@ class TradingViewModel @Inject constructor(
                     _state.update { currentState ->
                         either.fold(
                             ifLeft = { currentState.copy(error = it) },
-                            ifRight = { currentState.copy(tickers = it, error = null) },
+                            ifRight = { currentState.copy(allTickers = it, error = null) },
                         )
                             .copy(connectivityStatus = connectivityStatus)
                     }
