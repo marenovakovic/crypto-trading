@@ -288,17 +288,17 @@ class TradingViewModelTest {
 
         private val tickersAscendingPrice =
             persistentListOf(
-                Ticker(ticker = "z", price = "1", change24hPercentage = 1f),
-                Ticker(ticker = "f", price = "2", change24hPercentage = 1f),
-                Ticker(ticker = "a", price = "3", change24hPercentage = 1f),
+                Ticker(ticker = "", price = "8.32 USD", change24hPercentage = 1f),
+                Ticker(ticker = "", price = "20.86 USD", change24hPercentage = 1f),
+                Ticker(ticker = "", price = "100.10 USD", change24hPercentage = 1f),
             )
         private val tickersDescendingPrice = tickersAscendingPrice.reversed().toImmutableList()
 
         private val tickersAscendingName =
             persistentListOf(
-                Ticker(ticker = "a", price = "", change24hPercentage = 1f),
-                Ticker(ticker = "b", price = "", change24hPercentage = 1f),
-                Ticker(ticker = "c", price = "", change24hPercentage = 1f),
+                Ticker(ticker = "a", price = "1 USD", change24hPercentage = 1f),
+                Ticker(ticker = "b", price = "2 USD", change24hPercentage = 1f),
+                Ticker(ticker = "c", price = "3 USD", change24hPercentage = 1f),
             )
         private val tickersDescendingName = tickersAscendingName.reversed().toImmutableList()
 
