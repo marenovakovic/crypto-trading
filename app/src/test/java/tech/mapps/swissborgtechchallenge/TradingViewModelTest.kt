@@ -328,5 +328,19 @@ class TradingViewModelTest {
                 assertEquals(tickersAscendingPrice, awaitItem().tickers)
             }
         }
+
+        @Test
+        fun `calling sort by price after sorting initial tickers sorts them by descending price`() =
+            runTest {
+                val viewModel = viewModel(tickers = tickersAscendingPrice.right())
+
+                viewModel.init()
+                viewModel.sortByPrice()
+                viewModel.sortByPrice()
+
+                viewModel.state.test {
+                    assertEquals(tickersDescendingPrice, awaitItem().tickers)
+                }
+            }
     }
 }
