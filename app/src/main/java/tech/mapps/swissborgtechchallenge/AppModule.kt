@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,6 +19,7 @@ import tech.mapps.swissborgtechchallenge.api.CryptoTradingApi
 interface AppModule {
 
     @Binds
+    @Singleton
     fun cryptoTradingApi(impl: BitfinexTradingApi): CryptoTradingApi
 
     companion object {
@@ -25,6 +27,7 @@ interface AppModule {
         fun coroutineScope() = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
 
         @Provides
+        @Singleton
         fun connectivityStatusTracker(@ApplicationContext context: Context): ConnectivityStatusTracker =
             ConnectivityStatusTrackerImpl(context)
 
