@@ -2,7 +2,8 @@ KMP version of this project is being developed, I'll delete this when it's done 
 This meets the requirements so I submitted it but I didn't get green light to proceed with KMP when I initially started.
 When KMP project is done I will link it here.
 
-- If I had more time I would refine refresh mecanism. If it takes too long to load the data on 5 second mark I'd show some info to the user... or something similar.
+If I had more time:
+- I'd refine refresh mecanism. If it takes too long to load the data on 5 second mark I'd show some info to the user... or something similar.
 - I'll add UI and screenshot tests.
 - I'll not hardcode neither currency nor trading pairs.
 
