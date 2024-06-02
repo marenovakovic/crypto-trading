@@ -49,13 +49,3 @@ class ConnectivityStatusTrackerImpl(context: Context) : ConnectivityStatusTracke
         }
     }
 }
-
-inline fun <Result> Flow<ConnectivityStatus>.map(
-    crossinline onUnavailable: suspend () -> Result,
-    crossinline onAvailable: suspend () -> Result,
-): Flow<Result> = map { status ->
-    when (status) {
-        ConnectivityStatus.Unavailable -> onUnavailable()
-        ConnectivityStatus.Available -> onAvailable()
-    }
-}
